@@ -13,6 +13,20 @@ float w2[1024];
 float w3[1024];
 
 
+void avgpool(float *x, float *y, int numseg, int n) {
+    const float zero = 0.0;
+
+    for (int i = 0; i < n; i++)
+    y[i] = zero;
+
+    float norm = 1.0 / (float)numseg;
+    
+    for (int i = 0; i < numseg; i++)
+    for (int j = 0; j < n; j++)
+    y[j] += x[j + i * n] * norm;
+}
+
+
 void sigmoid(float *x, int n) {
     const float one = 1.0;
 
