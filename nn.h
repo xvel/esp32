@@ -129,7 +129,10 @@ void linear(float *x, float *w, float *b, float *y, int numseg, int in, int out)
 }
 
 
-void add()
+void add(float *y, float *x, int n) {
+    for (int i = 0; i < n; i++)
+    y[i] += x[i];
+}
 
 
 void setup() {
