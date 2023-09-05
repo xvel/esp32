@@ -143,7 +143,7 @@ void linear(float *x, float *w, float *b, float *y, int numseg, int in, int out)
 }
 
 
-void conv2d(float *x, float *w, float *b, float *y, int h, int w, int c, int k, int p) {
+void conv2d1(float *x, float *w, float *b, float *y, int h, int w, int c, int k, int p) {    // do testów
   int out_h = h - k + 2*p + 1;
   int out_w = w - k + 2*p + 1;
   for (int i = 0; i < out_h; i++) {
@@ -166,6 +166,40 @@ void conv2d(float *x, float *w, float *b, float *y, int h, int w, int c, int k, 
         y[(i*out_w + j)*c + l] = result + b[l];
       }
     }
+  }
+}
+
+
+void im2col(float* im, int h, int w, int c, int k, int p, float* col) {    // do testów
+  int out_h = h - k + 2*p + 1;
+  int out_w = w - k + 2*p + 1;
+  for (int i = 0; i < out_h; i++) {
+    for (int j = 0; j < out_w; j++) {
+      for (int l = 0; l < c; l++) {
+        for (int m = 0; m < k; m++) {
+          for (int n = 0; n < k; n++) {
+            int x_i = i - p + m;
+            int x_j = j - p + n;
+            if (x_i >= 0 && x_i < h && x_j >= 0 && x_j < w) {
+              col[((i * out_w + j) * c + l) * k * k + m * k + n] = im[(x_i * w + x_j) * c + l];
+            } else {
+              col[((i * out_w + j) * c + l) * k * k + m * k + n] = 0.0f;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void conv2d2(float *x, float *w, float *b, float *y, int h, int w, int c, int k, int p) {    // do testów
+  int out_h = h - k + 2*p + 1;
+  int out_w = w - k + 2*p + 1;
+  float col[out_h * out_w * c * k * k];
+  im2col(x, h, w, c, k, p, col);
+  matmul(col, w, y, out_h * out_w * c, k * k, 1);
+  for (int i = 0; i < out_h * out_w * c; i++) {
+    y[i] += b[i % c];
   }
 }
 
