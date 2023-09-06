@@ -75,6 +75,16 @@ void leakyrelu(float *x, float negslope, int n) {
 }
 
 
+void hardswish(float *x, int n) {
+    const float c1 = -3.0, c2 = 3.0;
+    const float zero = 0.0, t = 3.0, s = 1.0/6.0;
+
+    for (int i = 0; i < n; i++) {
+        if (x[i] <= c1)      x[i] = zero;
+        else if (x[i] <= c2) x[i] *= ((x[i] + t) * s);
+}
+
+
 void mul(float *x, float *y, float *z, int n) {
     for (int i = 0; i < n; i++)
     z[i] = x[i] * y[i];
