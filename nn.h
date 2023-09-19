@@ -82,6 +82,7 @@ void hardswish(float *x, int n) {
     for (int i = 0; i < n; i++) {
         if (x[i] <= c1)      x[i] = zero;
         else if (x[i] <= c2) x[i] *= ((x[i] + t) * s);
+    }
 }
 
 
